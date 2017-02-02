@@ -1,0 +1,78 @@
+0. Setting up database on server
+
+https://www.digitalocean.com/community/tutorials/how-to-migrate-a-mysql-database-to-a-new-server-on-ubuntu-14-04
+
+0.1. Connecting to server:
+server’s public IP address (가비아: 117.52.89.194)
+get ssh connection to server
+
+    ssh root@117.52.89.194
+
+0.2. Creating backup SQL file from server:
+
+    mysql -u root -p
+
+    FLUSH TABLES WITH READ LOCK;
+    SET GLOBAL read_only = ON;
+    EXIT
+
+    mysqldump --lock-all-tables -u root -p --all-databases > dump.sql
+
+(from local terminal)
+    scp root@117.52.89.194:dump.sql /home/phil
+
+(back on server)
+    SET GLOBAL read_only = OFF;
+    UNLOCK TABLES;
+
+0.3 Creating the DB on new server:
+
+sudo apt-get update
+sudo apt-get install mysql-server
+sudo mysql_install_db
+sudo mysql_secure_installation
+
+0.4 Import old database to new database:
+
+mysql -u root -p < dump.sql
+
+
+*** Python 2.7 specific encoding/decoding problem for Korean:
+
+SOLVED:
+
+import sys
+reload(sys)
+sys.setdefaultencoding(‘utf-8’)
+print(str(unicode(‘some korean word’))
+
+
+1. Gulp.js
+
+(for downloading node.js, project manager, and gulp on server)
+sudo apt-get update
+sudo apt-get install nodejs
+sudo apt-get install npm
+sudo npm install gulp -g
+
+(initialize gulp in working folder)
+npm init (create package.json)
+npm install gulp --save-dev
+
+(install gulp modules)
+npm install gulp-sass --save-dev
+(npm install browser-sync –-save-dev)
+npm install gulp-useref –-save-dev
+npm install gulp-uglify –-save-dev
+npm install gulp-cssnano –-save-dev
+npm install gulp-if –-save-dev
+npm install gulp-imagemin –-save-dev
+npm install gulp-cache –-save-dev
+npm install del –-save-dev
+
+npm install jquery
+npm install bootstrap
+npm install font-awesome
+
+[when using Gulp and are hit with /usr/bin/env: node: No such file or directory error, then do
+ln -s /usr/bin/nodejs /usr/bin/node]
